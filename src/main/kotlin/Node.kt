@@ -1,8 +1,7 @@
-
-class Node (
+class Node(
     val nestingLevel: Int,
     private var data: GameData,
-    private var parent: Node?= null,
+    private var parent: Node? = null,
     private var children: MutableList<Node> = mutableListOf()
 ) {
 
@@ -51,6 +50,17 @@ class Node (
             }
         }
         return leafNodes
+    }
+
+    fun getNotCalculated(): MutableList<Node> {
+        val notCalculatedNode = mutableListOf<Node>()
+        if (this.getData().point == -4) {
+            notCalculatedNode.add(this)
+            for (child in children) {
+                notCalculatedNode.addAll(child.getNotCalculated())
+            }
+        }
+        return notCalculatedNode
     }
 
     override fun toString(): String {

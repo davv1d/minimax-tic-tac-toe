@@ -41,14 +41,51 @@ class Minimax {
 
     fun rateTheBoard(allLeafNode: MutableList<Node>) {
         rateTheBoard2(allLeafNode)
-        for (leaf in allLeafNode) {
-            val parent = leaf.getParent()
-            if (parent != null) {
-                val children = parent.getChildren()
-                val parentPoint = calculateParentPoint(children)
-                parent.getData().point = parentPoint
+        do {
+            val notCalculated = allLeafNode.asSequence()
+                .flatMap { node -> node.getNotCalculated().asSequence() }
+                .toList()
+
+            for (leaf in allLeafNode) {
+                val parent = leaf.getParent()
+                if (parent != null && parent.getData().point == -4) {
+                    val children = parent.getChildren()
+                    val notCalculateChildren = children.asSequence()
+                        .filter { node -> node.getData().point == -4 }
+                        .toList()
+                    if (notCalculateChildren.isEmpty()) {
+                        val parentPoint = calculateParentPoint(children)
+                        parent.getData().point = parentPoint
+                    }
+                }
             }
-        }
+        } while (notCalculated.size > 1)
+    }
+
+
+    fun testRate(tree: Node) {
+        rateTheBoard2(tree.getAllLeafNodes())
+        do {
+            val notCalculated = tree.getNotCalculated()
+            for (node in notCalculated) {
+                if (node.isLeafNode()) {
+                    calculatePoint(node.getData())
+                } else {
+                    val notCalculateChildren = getNotCalculatedChildren(node)
+                    if (notCalculateChildren.isEmpty()) {
+                        val nodePoint = calculateParentPoint(node.getChildren())
+                        node.getData().point = nodePoint
+                    }
+                }
+            }
+        } while (notCalculated.size > 1)
+
+    }
+
+    private fun getNotCalculatedChildren(node: Node): List<Node> {
+        return node.getChildren().asSequence()
+            .filter { n -> n.getData().point == -4 }
+            .toList()
     }
 
 

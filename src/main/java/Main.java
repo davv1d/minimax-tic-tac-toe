@@ -8,9 +8,9 @@ public class Main {
     public static void main(String[] args) {
         Minimax minimax = new Minimax();
         String[][] board = {
-                {"X", " ", " "},
+                {"O", " ", " "},
                 {" ", "X", " "},
-                {"O", "X", "O"}};
+                {"X", " ", " "}};
         System.out.println(BoardOperator.INSTANCE.isDraw(board));
         System.out.println(BoardOperator.INSTANCE.isWin(board));
 //        System.out.println(new GameData(board));
@@ -30,7 +30,9 @@ public class Main {
         List<Node> sortedLeafs = allLeafNodes.stream()
                 .sorted((o1, o2) -> Integer.compare(o2.getNestingLevel(), o1.getNestingLevel()))
                 .collect(Collectors.toList());
-        minimax.rateTheBoard(sortedLeafs);
+//        minimax.rateTheBoard(sortedLeafs);
+//        List<Node> notCalculated = tree.getNotCalculated();
+        minimax.testRate(tree);
         System.out.println(numberOfPossibleMoves);
     }
 }
