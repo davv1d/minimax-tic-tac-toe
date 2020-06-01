@@ -10,4 +10,11 @@ enum class Player {
     };
 
     abstract fun changePlayer(): Player
+
+    override fun toString(): String {
+        return when(this == NO) {
+            true -> " "
+            else -> this.name
+        }
+    }
 }

@@ -1,22 +1,17 @@
-import kotlin.random.Random
-
 class Minimax {
-    private val movementAppraiser: MovementAppraiser = MovementAppraiser()
-    private val movementCalculator: MovementCalculator = MovementCalculator()
+    private val movementsAppraiser = MovementsAppraiser()
+    private val movementsCalculator = MovementsCalculator()
 
-    fun getBestMovement(board: Array<Array<Player>>, player: Player, nestingLevel: Int): GameData {
-        val movementTree = movementCalculator.calculateMoves(board, player, nestingLevel)
-        movementAppraiser.rateAllNodes(movementTree)
-        val bestMovement = chooseBestMovement(movementTree)
-        return when (bestMovement.size) {
-            1 -> bestMovement[0].data
-            else -> bestMovement[Random.nextInt(0, bestMovement.size)].data
-        }
+    fun getBestMovement(board: Array<Array<Player>>, player: Player, nestingLevel: Int): List<GameData> {
+        val movementsTree = movementsCalculator.calculateMoves(board, player, nestingLevel)
+        movementsAppraiser.rateAllNodes(movementsTree)
+        val bestMovements = chooseBestMovements(movementsTree)
+        return bestMovements.asSequence().map { node -> node.data }.toList()
     }
 
-    private fun chooseBestMovement(movementTree: Node): List<Node> {
+    private fun chooseBestMovements(movementTree: Node): List<Node> {
         return movementTree.children.asSequence()
-            .filter { node -> node.data.point == movementTree.data.point }
+            .filter { node -> node.getPoints() == movementTree.getPoints() }
             .toList()
     }
 }

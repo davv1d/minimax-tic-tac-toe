@@ -28,13 +28,21 @@ class Node(
 
     fun getNotRatedNodes(): MutableList<Node> {
         val notRatedNodes = mutableListOf<Node>()
-        if (this.data.point == Point.notCalculated()) {
+        if (this.getPoints() == Points.notCalculated()) {
             notRatedNodes.add(this)
             for (child in children) {
                 notRatedNodes.addAll(child.getNotRatedNodes())
             }
         }
         return notRatedNodes
+    }
+
+    fun getBoard(): Array<Array<Player>> = this.data.board
+
+    fun getPoints(): Points = this.data.points
+
+    fun setPoints(points: Points) {
+        this.data.points = points
     }
 
     override fun toString(): String {

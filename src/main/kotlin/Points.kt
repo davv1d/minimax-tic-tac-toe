@@ -1,20 +1,20 @@
-open class Point private constructor(val value: Int) {
+open class Points private constructor(val value: Int) {
 
     companion object {
-        fun computerWin(): Point = Point(1)
+        fun computerWin(): Points = Points(1)
 
-        fun humanWin(): Point = Point(-1)
+        fun humanWin(): Points = Points(-1)
 
-        fun draw(): Point = Point(0)
+        fun draw(): Points = Points(0)
 
-        fun notCalculated(): Point = Point(Int.MIN_VALUE)
+        fun notCalculated(): Points = Points(Int.MIN_VALUE)
     }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as Point
+        other as Points
 
         if (value != other.value) return false
 
