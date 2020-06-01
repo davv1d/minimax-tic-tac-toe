@@ -1,4 +1,4 @@
-import Player.*
+import Player.NO
 
 object BoardOperator {
     fun isDraw(board: Array<Array<Player>>): Boolean {

@@ -1,5 +1,3 @@
-import Player.*
-
 class MovementAppraiser {
     fun rateAllNodes(tree: Node) {
         rateAllNodeLeaves(tree.getAllLeavesNodes())

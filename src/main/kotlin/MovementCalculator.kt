@@ -4,7 +4,7 @@ class MovementCalculator {
         var player2 = player
         for (levelNumber in 1..nestingLevel) {
             val allLeavesNodes = node.getAllLeavesNodes()
-            player2 = changePlayer(player2)
+            player2 = player2.changePlayer()
             calculateOneMovement(allLeavesNodes, player2, levelNumber)
         }
         return node
@@ -24,13 +24,6 @@ class MovementCalculator {
                     }
                 }
             }
-        }
-    }
-
-    private fun changePlayer(player: Player): Player {
-        return when (player) {
-            Player.X -> Player.O
-            else -> Player.X
         }
     }
 }
