@@ -20,3 +20,12 @@ fun Array<Array<Player>>.getNumberOfPossibleMoves(): Int {
     }
     return counter
 }
+
+fun Array<Array<Player>>.isEmpty(): Boolean {
+    for(x in 0 until 3) {
+        for(y in 0 until 3){
+            if (this[x][y] != NO) return false
+        }
+    }
+    return true
+}

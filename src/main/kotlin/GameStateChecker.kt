@@ -1,6 +1,6 @@
 import Player.NO
 
-object GameStateChecker {
+class GameStateChecker {
     fun isDraw(board: Array<Array<Player>>): Boolean {
         for (x in 0 until 3) {
             for (y in 0 until 3) {

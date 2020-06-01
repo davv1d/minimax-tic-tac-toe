@@ -1,15 +1,13 @@
 class MovementsAppraiser {
+    private val gameStateChecker = GameStateChecker()
+
     fun rateAllNodes(tree: Node) {
         rateAllNodeLeaves(tree.getAllLeavesNodes())
         do {
             val notRatedNodes = tree.getNotRatedNodes()
             for (node in notRatedNodes) {
-                when {
-                    node.isLeafNode() -> calculateHumanOrComputerPoints(node)
-                    else -> when {
-                        areChildrenRated(node) -> node.setPoints(getParentPoints(node.children))
-                    }
-                }
+                if (node.isLeafNode()) calculateHumanOrComputerPoints(node)
+                else if (areChildrenRated(node)) node.setPoints(getParentPoints(node.children))
             }
         } while (notRatedNodes.size > 1)
     }
@@ -40,28 +38,24 @@ class MovementsAppraiser {
         return children.asSequence()
             .map { node -> node.getPoints() }
             .reduce { acc, i ->
-                when {
-                    compare.invoke(acc, i) -> i
-                    else -> acc
-                }
+                if (compare.invoke(acc, i)) i
+                else acc
             }
     }
 
     private fun calculateHumanOrComputerPoints(node: Node): Points {
-        return when (node.nestingLevel % 2 == 0) {
-            true -> {
-                calculatePoints(node, Points.humanWin())
-            }
-            else -> {
-                calculatePoints(node, Points.computerWin())
-            }
+        return if (node.nestingLevel % 2 == 0) {
+            calculatePoints(node, Points.humanWin())
+        } else {
+            calculatePoints(node, Points.computerWin())
         }
     }
 
     private fun calculatePoints(node: Node, points: Points): Points {
-        return when {
-            GameStateChecker.isWin(node.getBoard()) -> points
-            else -> Points.draw()
+        return if (gameStateChecker.isWin(node.getBoard())) {
+            points
+        } else {
+            Points.draw()
         }
     }
 }

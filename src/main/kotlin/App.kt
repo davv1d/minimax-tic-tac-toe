@@ -1,17 +1,12 @@
-import GameStateChecker.isDraw
-import GameStateChecker.isWin
 import Player.*
 
 fun main() {
-    val minimax = Minimax()
+    val computer = Computer(0.7)
     val board = arrayOf(
-        arrayOf(X, X, NO),
-        arrayOf(NO, O, O),
-        arrayOf(NO, O, NO)
+        arrayOf(X, NO, NO),
+        arrayOf(X, O, NO),
+        arrayOf(O, X, O)
     )
-    println(isDraw(board))
-    println(isWin(board))
-    val numberOfPossibleMoves = board.getNumberOfPossibleMoves()
-    val bestMovement = minimax.getBestMovement(board, O, numberOfPossibleMoves)
-    println(bestMovement)
+    val selectMovement = computer.selectMovement(board = board, human = X)
+    println(selectMovement)
 }

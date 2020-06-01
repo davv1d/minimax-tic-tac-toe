@@ -1,6 +1,7 @@
 import Player.NO
 
 class MovementsCalculator {
+    private val gameStateChecker = GameStateChecker()
     fun calculateMoves(board: Array<Array<Player>>, player: Player, nestingLevel: Int): Node {
         val node = Node(0, GameData(board.cloneBoard()))
         var player2 = player
@@ -30,6 +31,6 @@ class MovementsCalculator {
     }
 
     private fun isMovePossible(board: Array<Array<Player>>, x: Int, y: Int): Boolean {
-        return board[x][y] == NO && !GameStateChecker.isDraw(board) && !GameStateChecker.isWin(board)
+        return board[x][y] == NO && !gameStateChecker.isDraw(board) && !gameStateChecker.isWin(board)
     }
 }
