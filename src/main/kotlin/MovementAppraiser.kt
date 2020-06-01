@@ -1,3 +1,5 @@
+import Player.*
+
 class MovementAppraiser {
     fun rateAllNodes(tree: Node) {
         rateAllNodeLeaves(tree.getAllLeavesNodes())
@@ -5,7 +7,7 @@ class MovementAppraiser {
             val notRatedNodes = tree.getNotRatedNodes()
             for (node in notRatedNodes) {
                 if (node.isLeafNode()) {
-                    calculatePoint(node.data)
+                    newCalculatePoint(node)
                 } else {
                     if (areChildrenRated(node)) {
                         node.data.point = calculateParentPoint(node.children)
@@ -17,27 +19,27 @@ class MovementAppraiser {
 
     private fun areChildrenRated(node: Node): Boolean {
         return node.children.asSequence()
-            .filter { n -> n.data.point == -4 }
+            .filter { n -> n.data.point == Point.notCalculated() }
             .toList().isEmpty()
     }
 
 
     private fun rateAllNodeLeaves(allLeafNode: MutableList<Node>) {
         for (leaf in allLeafNode) {
-            val point = calculatePoint(leaf.data)
+            val point = newCalculatePoint(leaf)
             leaf.data.point = point
         }
     }
 
-    private fun calculateParentPoint(children: MutableList<Node>): Int {
-        return if (children[0].data.playerMakingTheMove == "X") {
-            calculateBestChildrenPoint(children) { acc, i -> i < acc }
+    private fun calculateParentPoint(children: MutableList<Node>): Point {
+        return if (children[0].nestingLevel % 2 == 0) {
+            calculateBestChildrenPoint(children) { acc, i -> i.value < acc.value }
         } else {
-            calculateBestChildrenPoint(children) { acc, i -> i > acc }
+            calculateBestChildrenPoint(children) { acc, i -> i.value > acc.value }
         }
     }
 
-    private fun calculateBestChildrenPoint(children: MutableList<Node>, compare: (Int, Int) -> Boolean): Int {
+    private fun calculateBestChildrenPoint(children: MutableList<Node>, compare: (Point, Point) -> Boolean): Point {
         return children.asSequence()
             .map { node -> node.data.point }
             .reduce { acc, i ->
@@ -49,18 +51,18 @@ class MovementAppraiser {
             }
     }
 
-    private fun calculatePoint(gameData: GameData): Int {
-        return when (gameData.playerMakingTheMove) {
-            "X" -> {
+    private fun newCalculatePoint(node: Node): Point {
+        return when (node.nestingLevel % 2 == 0) {
+            true -> {
                 when {
-                    BoardOperator.isWin(gameData.board) -> -1
-                    else -> 0
+                    BoardOperator.isWin(node.data.board) -> Point.humanWin()
+                    else -> Point.draw()
                 }
             }
             else -> {
                 when {
-                    BoardOperator.isWin(gameData.board) -> 1
-                    else -> 0
+                    BoardOperator.isWin(node.data.board) -> Point.computerWin()
+                    else -> Point.draw()
                 }
             }
         }

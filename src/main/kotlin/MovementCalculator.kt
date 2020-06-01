@@ -1,6 +1,6 @@
 class MovementCalculator {
-    fun calculateMoves(board: Array<Array<String>>, player: String, nestingLevel: Int): Node {
-        val node = Node(0, GameData(BoardOperator.cloneBoard(board), player))
+    fun calculateMoves(board: Array<Array<Player>>, player: Player, nestingLevel: Int): Node {
+        val node = Node(0, GameData(BoardOperator.cloneBoard(board)))
         var player2 = player
         for (levelNumber in 1..nestingLevel) {
             val allLeavesNodes = node.getAllLeavesNodes()
@@ -10,15 +10,15 @@ class MovementCalculator {
         return node
     }
 
-    private fun calculateOneMovement(nodes: MutableList<Node>, player: String, nestingLevel: Int) {
+    private fun calculateOneMovement(nodes: MutableList<Node>, player: Player, nestingLevel: Int) {
         for (node in nodes) {
             val board = node.data.board
             for (x in 0 until 3) {
                 for (y in 0 until 3) {
-                    if (board[x][y] == " " && !BoardOperator.isDraw(board) && !BoardOperator.isWin(board)) {
-                        val clonedBoard: Array<Array<String>> = BoardOperator.cloneBoard(board)
+                    if (board[x][y] == Player.NO && !BoardOperator.isDraw(board) && !BoardOperator.isWin(board)) {
+                        val clonedBoard: Array<Array<Player>> = BoardOperator.cloneBoard(board)
                         clonedBoard[x][y] = player
-                        val data = GameData(clonedBoard, playerMakingTheMove = player)
+                        val data = GameData(clonedBoard)
                         val child = Node(data = data, nestingLevel = nestingLevel)
                         node.addChild(child)
                     }
@@ -27,11 +27,10 @@ class MovementCalculator {
         }
     }
 
-    private fun changePlayer(player: String): String {
+    private fun changePlayer(player: Player): Player {
         return when (player) {
-            "X" -> "O"
-            else -> "X"
+            Player.X -> Player.O
+            else -> Player.X
         }
     }
-
 }

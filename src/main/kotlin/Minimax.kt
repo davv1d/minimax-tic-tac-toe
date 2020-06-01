@@ -4,7 +4,7 @@ class Minimax {
     private val movementAppraiser: MovementAppraiser = MovementAppraiser()
     private val movementCalculator: MovementCalculator = MovementCalculator()
 
-    fun getBestMovement(board: Array<Array<String>>, player: String, nestingLevel: Int): GameData {
+    fun getBestMovement(board: Array<Array<Player>>, player: Player, nestingLevel: Int): GameData {
         val movementTree = movementCalculator.calculateMoves(board, player, nestingLevel)
         movementAppraiser.rateAllNodes(movementTree)
         val bestMovement = chooseBestMovement(movementTree)

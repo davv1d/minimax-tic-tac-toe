@@ -28,7 +28,7 @@ class Node(
 
     fun getNotRatedNodes(): MutableList<Node> {
         val notRatedNodes = mutableListOf<Node>()
-        if (this.data.point == -4) {
+        if (this.data.point == Point.notCalculated()) {
             notRatedNodes.add(this)
             for (child in children) {
                 notRatedNodes.addAll(child.getNotRatedNodes())

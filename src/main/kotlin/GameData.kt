@@ -1,5 +1,5 @@
 
-class GameData(val board: Array<Array<String>>, val playerMakingTheMove: String, var point: Int = -4) {
+class GameData(val board: Array<Array<Player>>, var point: Point = Point.notCalculated()) {
 
     override fun toString(): String {
         val s = StringBuilder()
